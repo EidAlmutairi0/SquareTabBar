@@ -1,11 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
+import MyTabBar from "./MyTabBar";
 
 export default function App() {
+  const tabs = [
+    {
+      icon: "grid",
+      label: "Dashboard",
+    },
+    {
+      icon: "flag",
+      label: "Goals",
+    },
+    {
+      icon: "tag",
+      label: "Financial",
+    },
+    {
+      icon: "star",
+      label: "Transfer",
+    },
+  ];
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <MyTabBar tabs={tabs} default={0}></MyTabBar>
     </View>
   );
 }
@@ -13,8 +31,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
