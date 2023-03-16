@@ -17,23 +17,26 @@ const MyTabBar = (props) => {
   const [currentTab, setCurrentTab] = useState(props.default);
 
   const handleTabPressed = (index) => {
-    scaleIcon.setValue(0);
-    setCurrentTab(index);
-    Animated.sequence([
-      Animated.spring(changeTab, {
-        toValue: index * tabWidth,
-        useNativeDriver: true,
-      }).start(),
-      Animated.spring(scaleIcon, {
-        toValue: 1,
-        useNativeDriver: true,
-        duration: 1000,
-      }).start(),
-    ]);
+    if (index !== currentTab) {
+      scaleIcon.setValue(0);
+      setCurrentTab(index);
+      Animated.sequence([
+        Animated.spring(changeTab, {
+          toValue: index * tabWidth,
+          useNativeDriver: true,
+        }).start(),
+        Animated.spring(scaleIcon, {
+          toValue: 1,
+          useNativeDriver: true,
+          bounciness: true,
+          duration: 100000,
+        }).start(),
+      ]);
+    }
   };
 
   const changeTab = useRef(new Animated.Value(currentTab)).current;
-  const scaleIcon = useRef(new Animated.Value(0)).current;
+  const scaleIcon = useRef(new Animated.Value(1)).current;
 
   return (
     <SafeAreaView style={styles.tabBar}>
