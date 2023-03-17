@@ -23,7 +23,17 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <MyTabBar tabs={tabs} default={0}></MyTabBar>
+      <MyTabBar
+        tabs={tabs}
+        default={0}
+        tabBarStyle={{}}
+        iconsStyle={{}}
+        iconsSize={22}
+        selectedIconSize={22}
+        labelsStyle={{}}
+        selectedLabelStyle={{}}
+        selectedTabStyle={{}}
+      ></MyTabBar>
     </View>
   );
 }

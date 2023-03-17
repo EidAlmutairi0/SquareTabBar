@@ -51,7 +51,7 @@ const MyTabBar = (props) => {
       >
         {props.tabs[currentTab].screen}
       </View>
-      <SafeAreaView style={styles.tabBar}>
+      <SafeAreaView style={[styles.tabBar, props.tabBarStyle]}>
         <View
           style={{
             flex: 1,
@@ -71,6 +71,10 @@ const MyTabBar = (props) => {
                 <SingleTab
                   width={tabWidth.toFixed()}
                   icon={item.item.icon}
+                  labelsStyle={props.labelsStyle}
+                  selectedLabelStyle={props.selectedLabelStyle}
+                  iconsStyle={props.iconsStyle}
+                  iconsSize={props.iconsSize ? props.iconsSize : 22}
                   label={item.item.label}
                   currentTab={currentTab}
                   index={item.index}
@@ -103,18 +107,21 @@ const MyTabBar = (props) => {
             }}
           >
             <View
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 10,
-                backgroundColor: "rgb(0 160 138)",
-                alignContent: "center",
-                alignItems: "center",
+              style={[
+                {
+                  width: 48,
+                  height: 48,
+                  borderRadius: 10,
+                  backgroundColor: "rgb(0 160 138)",
+                  alignContent: "center",
+                  alignItems: "center",
 
-                top: -15,
-                zIndex: 200,
-                justifyContent: "center",
-              }}
+                  top: -15,
+                  zIndex: 200,
+                  justifyContent: "center",
+                },
+                props.selectedTabStyle,
+              ]}
             >
               <Animated.View
                 style={{
@@ -128,7 +135,7 @@ const MyTabBar = (props) => {
                 <Icon
                   style={{ color: "white" }}
                   name={props.tabs[currentTab].icon}
-                  size={22}
+                  size={props.selectedIconSize ? props.selectedIconSize : 22}
                 ></Icon>
               </Animated.View>
             </View>

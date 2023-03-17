@@ -13,21 +13,20 @@ const SingleTab = (props) => {
       ]}
     >
       <View style={props.currentTab === props.index && styles.selectedView}>
-        <Icon
-          style={[
-            props.style,
-            props.currentTab !== props.index
-              ? styles.icon
-              : styles.selectedIcon,
-          ]}
-          name={props.icon}
-          size={22}
-        ></Icon>
+        {props.currentTab !== props.index && (
+          <Icon
+            style={[styles.icon, props.iconsStyle]}
+            name={props.icon}
+            size={props.iconsSize}
+          ></Icon>
+        )}
       </View>
       <Text
         style={[
-          props.style,
-          props.currentTab !== props.index ? styles.text : styles.selectedText,
+          styles.text,
+          props.currentTab !== props.index
+            ? props.labelsStyle
+            : (props.selectedLabelStyle, styles.selectedText),
         ]}
       >
         {props.label}
@@ -50,18 +49,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     color: "#8F98A8",
   },
-  selectedIcon: {
-    color: "white",
-  },
 
   text: {
-    color: "#8F98A8",
     position: "absolute",
     bottom: 0,
     fontSize: 12,
   },
   selectedText: {
-    color: "black",
     fontWeight: "bold",
     position: "absolute",
     bottom: 0,
