@@ -26,7 +26,7 @@ const SingleTab = (props) => {
           styles.text,
           props.currentTab !== props.index
             ? props.labelsStyle
-            : (styles.selectedText, props.selectedLabelStyle),
+            : [styles.selectedText, props.selectedLabelStyle],
         ]}
       >
         {props.label}
