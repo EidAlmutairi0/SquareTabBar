@@ -12,9 +12,28 @@ import Icon from "react-native-vector-icons/Feather";
 import SingleTab from "./SingleTab";
 
 const SquareTabBar = (props) => {
-  let tabWidth = (Dimensions.get("screen").width - 20) / props.tabs.length;
+  const tabs = props.tabs
+    ? useRef(props.tabs).current
+    : [
+        {
+          icon: "user",
+          label: "Profile",
+          screen: <View></View>,
+        },
+        {
+          icon: "home",
+          label: "Home",
+          screen: <View></View>,
+        },
+        {
+          icon: "map",
+          label: "Map",
+          screen: <View></View>,
+        },
+      ];
+  let tabWidth = (Dimensions.get("screen").width - 20) / tabs.length;
 
-  if (props.defaultTab > props.tabs.length) {
+  if (props.defaultTab > tabs.length) {
     throw new Error("Default value is larger than tabs length");
   }
 
@@ -67,7 +86,7 @@ const SquareTabBar = (props) => {
             horizontal={true}
             scrollEnabled={false}
             style={styles.tabs}
-            data={props.tabs}
+            data={tabs}
             renderItem={(item) => (
               <Pressable
                 onPress={() => {
