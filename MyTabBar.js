@@ -11,10 +11,16 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import SingleTab from "./SingleTab";
 
-const MyTabBar = (props) => {
+const SquareTabBar = (props) => {
   let tabWidth = (Dimensions.get("screen").width - 20) / props.tabs.length;
 
-  const [currentTab, setCurrentTab] = useState(props.default);
+  if (props.defaultTab > props.tabs.length) {
+    throw new Error("Default value is larger than tabs length");
+  }
+
+  const [currentTab, setCurrentTab] = useState(
+    props.defaultTab ? props.defaultTab : 1
+  );
 
   const handleTabPressed = (index) => {
     if (index !== currentTab) {
@@ -35,7 +41,7 @@ const MyTabBar = (props) => {
     }
   };
 
-  const changeTab = useRef(new Animated.Value(currentTab)).current;
+  const changeTab = useRef(new Animated.Value(currentTab * tabWidth)).current;
   const scaleIcon = useRef(new Animated.Value(1)).current;
 
   return (
@@ -146,7 +152,7 @@ const MyTabBar = (props) => {
   );
 };
 
-export default MyTabBar;
+export default SquareTabBar;
 
 const styles = StyleSheet.create({
   tabBar: {
