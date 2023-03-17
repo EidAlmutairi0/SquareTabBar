@@ -1,7 +1,7 @@
 {
   "name": "square_tabbar",
   "version": "1.0.1",
-  "main": "/TabBar/SquareTabBar.js",
+  "main": "index.js",
   "scripts": {},
   "dependencies": {
     "react": "18.2.0",
