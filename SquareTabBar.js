@@ -6,6 +6,7 @@ import {
   Pressable,
   SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import SingleTab from "./SingleTab";
@@ -17,11 +18,48 @@ const SquareTabBar = (props) => {
   const currentTabIcon =
     props.descriptors[routes[props.state.index].key].options.tabBarIcon;
 
+  const tempTabs = [
+    {
+      name: "Profile",
+      icon: "user",
+      label: "Profile",
+      screen: <View></View>,
+    },
+    {
+      name: "Home",
+      icon: "home",
+      label: "Home",
+      screen: <View></View>,
+    },
+    {
+      name: "Map",
+      icon: "map",
+      label: "Map",
+      screen: <View></View>,
+    },
+  ];
+
+  const tabs = props.tabs ? props.tabs : tempTabs;
   let tabWidth = (Dimensions.get("screen").width - 20) / routes.length;
+
+  if (props.defaultTab > tabs.length) {
+    throw new Error("Default value is larger than tabs length");
+  }
 
   const [currentTab, setCurrentTab] = useState(props.state.index);
 
-  const handleTabPressed = (index) => {
+  const handleTabPressed = (index, route) => {
+    const isFocused = props.state.index === index;
+
+    const event = props.navigation.emit({
+      type: "tabPress",
+      target: route.key,
+      canPreventDefault: true,
+    });
+
+    if (!isFocused && !event.defaultPrevented) {
+      props.navigation.navigate(route.name);
+    }
     if (index !== currentTab) {
       scaleIcon.setValue(0);
       setCurrentTab(index);
@@ -54,34 +92,23 @@ const SquareTabBar = (props) => {
 
     const Icon = options?.tabBarIcon;
 
-    const isFocused = props.state.index === index;
-
     const onPress = () => {
-      handleTabPressed(index);
-      const event = props.navigation.emit({
-        type: "tabPress",
-        target: route.key,
-        canPreventDefault: true,
-      });
-
-      if (!isFocused && !event.defaultPrevented) {
-        props.navigation.navigate(route.name);
-      }
+      handleTabPressed(index, route);
     };
     const tab = (
-      <Pressable key={index} onPress={onPress}>
-        <SingleTab
-          width={tabWidth.toFixed()}
-          icon={Icon}
-          labelsStyle={props.labelsStyle}
-          selectedLabelStyle={props.selectedLabelStyle}
-          iconsStyle={props.iconsStyle}
-          iconsSize={props.iconsSize ? props.iconsSize : 22}
-          label={label}
-          currentTab={currentTab}
-          index={index}
-        ></SingleTab>
-      </Pressable>
+      <SingleTab
+        key={index}
+        onPress={onPress}
+        width={tabWidth.toFixed()}
+        icon={Icon}
+        labelsStyle={props.labelsStyle}
+        selectedLabelStyle={props.selectedLabelStyle}
+        iconsStyle={props.iconsStyle}
+        iconsSize={props.iconsSize ? props.iconsSize : 22}
+        label={label}
+        currentTab={currentTab}
+        index={index}
+      ></SingleTab>
     );
     return tab;
   });
@@ -100,7 +127,6 @@ const SquareTabBar = (props) => {
           style={{
             flex: 1,
             position: "absolute",
-
             width: Dimensions.get("screen").width - 20,
             alignSelf: "center",
             zIndex: 200,
@@ -110,6 +136,8 @@ const SquareTabBar = (props) => {
             style={{
               position: "absolute",
               width: tabWidth,
+              justifyContent: "center",
+              alignContent: "center",
               transform: [
                 {
                   translateX: changeTab,
@@ -120,33 +148,45 @@ const SquareTabBar = (props) => {
             }}
           >
             <View
-              style={[
-                {
-                  width: 48,
-                  height: 48,
-                  borderRadius: 10,
-                  backgroundColor: "rgb(0 160 138)",
-                  alignContent: "center",
-                  alignItems: "center",
-
-                  top: -15,
-                  zIndex: 200,
-                  justifyContent: "center",
-                },
-                props.selectedTabStyle,
-              ]}
+              style={{
+                width: "50%",
+                alignItems: "center",
+                alignSelf: "center",
+                justifyContent: "center",
+              }}
             >
-              <Animated.View
-                style={{
-                  transform: [
-                    {
-                      scale: scaleIcon,
-                    },
-                  ],
+              <Pressable
+                onPress={() => {
+                  handleTabPressed(currentTab, routes[currentTab].key);
                 }}
+                style={[
+                  {
+                    width: 48,
+                    height: 48,
+                    borderRadius: 10,
+                    backgroundColor: "rgb(0 160 138)",
+                    alignContent: "center",
+                    alignItems: "center",
+
+                    top: -15,
+                    zIndex: 200,
+                    justifyContent: "center",
+                  },
+                  props.selectedTabStyle,
+                ]}
               >
-                {currentTabIcon}
-              </Animated.View>
+                <Animated.View
+                  style={{
+                    transform: [
+                      {
+                        scale: scaleIcon,
+                      },
+                    ],
+                  }}
+                >
+                  <Text style={props.selectedIconStyle}>{currentTabIcon}</Text>
+                </Animated.View>
+              </Pressable>
             </View>
           </Animated.View>
         </View>
@@ -176,7 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: "visible",
     flexDirection: "row",
-
+    width: Dimensions.get("screen").width - 20,
     alignSelf: "center",
   },
 });

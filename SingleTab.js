@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const SingleTab = (props) => {
   return (
@@ -11,24 +11,35 @@ const SingleTab = (props) => {
         },
       ]}
     >
-      <View
-        style={[
-          props.currentTab === props.index && styles.selectedView,
-          styles.icon,
-        ]}
+      <Pressable
+        onPress={props.onPress}
+        style={{
+          alignItems: "center",
+          alignContent: "center",
+          justifyContent: "center",
+          width: "50%",
+          height: "100%",
+        }}
       >
-        {props.currentTab !== props.index && props.icon}
-      </View>
-      <Text
-        style={[
-          styles.text,
-          props.currentTab !== props.index
-            ? props.labelsStyle
-            : [styles.selectedText, props.selectedLabelStyle],
-        ]}
-      >
-        {props.label}
-      </Text>
+        <View
+          style={[
+            props.currentTab === props.index && styles.selectedView,
+            styles.icon,
+          ]}
+        >
+          {props.currentTab !== props.index && props.icon}
+        </View>
+        <Text
+          style={[
+            styles.text,
+            props.currentTab !== props.index
+              ? props.labelsStyle
+              : [styles.selectedText, props.selectedLabelStyle],
+          ]}
+        >
+          {props.label}
+        </Text>
+      </Pressable>
     </View>
   );
 };
@@ -40,14 +51,24 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    textAlign: "center",
   },
   icon: {
-    paddingBottom: 20,
+    marginBottom: 20,
     color: "#8F98A8",
+    width: "100%",
+    alignSelf: "center",
+    textAlign: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 
   text: {
     position: "absolute",
+    alignSelf: "center",
+    textAlign: "center",
+    alignItems: "center",
+    width: "100%",
     bottom: 0,
     fontSize: 12,
   },
