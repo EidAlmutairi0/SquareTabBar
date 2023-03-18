@@ -1,6 +1,6 @@
 # rn-square-tabbar
 
-![Sample](./sample.gif)
+![preview](https://github.com/EidAlmutairi0/SquareTabBar/blob/master/sample.gif)
 
 Custom animated bottom-tab-bar for react-native.
 
