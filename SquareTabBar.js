@@ -17,38 +17,9 @@ const SquareTabBar = (props) => {
   const currentTabIcon =
     props.descriptors[routes[props.state.index].key].options.tabBarIcon;
 
-  const tempTabs = [
-    {
-      name: "Profile",
-      icon: "user",
-      label: "Profile",
-      screen: <View></View>,
-    },
-    {
-      name: "Home",
-      icon: "home",
-      label: "Home",
-      screen: <View></View>,
-    },
-    {
-      name: "Map",
-      icon: "map",
-      label: "Map",
-      screen: <View></View>,
-    },
-  ];
-
-  const tabs = props.tabs ? props.tabs : tempTabs;
   let tabWidth = (Dimensions.get("screen").width - 20) / routes.length;
 
-  if (props.defaultTab > tabs.length) {
-    throw new Error("Default value is larger than tabs length");
-  }
-
   const [currentTab, setCurrentTab] = useState(props.state.index);
-  // const [currentTabIcon, setCurrentTabIcon] = useState(
-  //   props.descriptors[routes]
-  // );
 
   const handleTabPressed = (index) => {
     if (index !== currentTab) {
