@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Icon from "react-native-vector-icons/Feather";
 
 const SingleTab = (props) => {
   return (
@@ -12,14 +11,13 @@ const SingleTab = (props) => {
         },
       ]}
     >
-      <View style={props.currentTab === props.index && styles.selectedView}>
-        {props.currentTab !== props.index && (
-          <Icon
-            style={[styles.icon, props.iconsStyle]}
-            name={props.icon}
-            size={props.iconsSize}
-          ></Icon>
-        )}
+      <View
+        style={[
+          props.currentTab === props.index && styles.selectedView,
+          styles.icon,
+        ]}
+      >
+        {props.currentTab !== props.index && props.icon}
       </View>
       <Text
         style={[
@@ -44,8 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   icon: {
-    margin: 10,
-
     paddingBottom: 20,
     color: "#8F98A8",
   },

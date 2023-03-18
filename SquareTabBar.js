@@ -1,45 +1,54 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
-  FlatList,
   Pressable,
   SafeAreaView,
   StyleSheet,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Feather";
 import SingleTab from "./SingleTab";
 
 const SquareTabBar = (props) => {
-  const tabs = props.tabs
-    ? useRef(props.tabs).current
-    : [
-        {
-          icon: "user",
-          label: "Profile",
-          screen: <View></View>,
-        },
-        {
-          icon: "home",
-          label: "Home",
-          screen: <View></View>,
-        },
-        {
-          icon: "map",
-          label: "Map",
-          screen: <View></View>,
-        },
-      ];
-  let tabWidth = (Dimensions.get("screen").width - 20) / tabs.length;
+  const Tab = createBottomTabNavigator();
+
+  const { routes } = props.state;
+  const currentTabIcon =
+    props.descriptors[routes[props.state.index].key].options.tabBarIcon;
+
+  const tempTabs = [
+    {
+      name: "Profile",
+      icon: "user",
+      label: "Profile",
+      screen: <View></View>,
+    },
+    {
+      name: "Home",
+      icon: "home",
+      label: "Home",
+      screen: <View></View>,
+    },
+    {
+      name: "Map",
+      icon: "map",
+      label: "Map",
+      screen: <View></View>,
+    },
+  ];
+
+  const tabs = props.tabs ? props.tabs : tempTabs;
+  let tabWidth = (Dimensions.get("screen").width - 20) / routes.length;
 
   if (props.defaultTab > tabs.length) {
     throw new Error("Default value is larger than tabs length");
   }
 
-  const [currentTab, setCurrentTab] = useState(
-    props.defaultTab ? props.defaultTab : 1
-  );
+  const [currentTab, setCurrentTab] = useState(props.state.index);
+  // const [currentTabIcon, setCurrentTabIcon] = useState(
+  //   props.descriptors[routes]
+  // );
 
   const handleTabPressed = (index) => {
     if (index !== currentTab) {
@@ -63,50 +72,58 @@ const SquareTabBar = (props) => {
   const changeTab = useRef(new Animated.Value(currentTab * tabWidth)).current;
   const scaleIcon = useRef(new Animated.Value(1)).current;
 
+  const content = routes.map((route, index) => {
+    const { options } = props.descriptors[route.key];
+    const label =
+      options.tabBarLabel !== undefined
+        ? options.tabBarLabel
+        : options.title !== undefined
+        ? options.title
+        : route.name;
+
+    const Icon = options?.tabBarIcon;
+
+    const isFocused = props.state.index === index;
+
+    const onPress = () => {
+      handleTabPressed(index);
+      const event = props.navigation.emit({
+        type: "tabPress",
+        target: route.key,
+        canPreventDefault: true,
+      });
+
+      if (!isFocused && !event.defaultPrevented) {
+        props.navigation.navigate(route.name);
+      }
+    };
+    const tab = (
+      <Pressable key={index} onPress={onPress}>
+        <SingleTab
+          width={tabWidth.toFixed()}
+          icon={Icon}
+          labelsStyle={props.labelsStyle}
+          selectedLabelStyle={props.selectedLabelStyle}
+          iconsStyle={props.iconsStyle}
+          iconsSize={props.iconsSize ? props.iconsSize : 22}
+          label={label}
+          currentTab={currentTab}
+          index={index}
+        ></SingleTab>
+      </Pressable>
+    );
+    return tab;
+  });
+
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        {props.tabs[currentTab].screen}
-      </View>
+    <View>
       <SafeAreaView style={[styles.tabBar, props.tabBarStyle]}>
         <View
           style={{
             flex: 1,
           }}
         >
-          <FlatList
-            horizontal={true}
-            scrollEnabled={false}
-            style={styles.tabs}
-            data={tabs}
-            renderItem={(item) => (
-              <Pressable
-                onPress={() => {
-                  handleTabPressed(item.index);
-                }}
-              >
-                <SingleTab
-                  width={tabWidth.toFixed()}
-                  icon={item.item.icon}
-                  labelsStyle={props.labelsStyle}
-                  selectedLabelStyle={props.selectedLabelStyle}
-                  iconsStyle={props.iconsStyle}
-                  iconsSize={props.iconsSize ? props.iconsSize : 22}
-                  label={item.item.label}
-                  currentTab={currentTab}
-                  index={item.index}
-                ></SingleTab>
-              </Pressable>
-            )}
-          ></FlatList>
+          <View style={styles.tabs}>{content}</View>
         </View>
         <View
           style={{
@@ -157,11 +174,7 @@ const SquareTabBar = (props) => {
                   ],
                 }}
               >
-                <Icon
-                  style={{ color: "white" }}
-                  name={props.tabs[currentTab].icon}
-                  size={props.selectedIconSize ? props.selectedIconSize : 22}
-                ></Icon>
+                {currentTabIcon}
               </Animated.View>
             </View>
           </Animated.View>
@@ -191,6 +204,8 @@ const styles = StyleSheet.create({
   tabs: {
     flex: 1,
     overflow: "visible",
+    flexDirection: "row",
+
     alignSelf: "center",
   },
 });

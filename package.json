@@ -1,11 +1,15 @@
 {
-  "name": "square_tabbar",
-  "version": "1.0.14",
+  "name": "rn-square-tabbar",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {},
   "dependencies": {
-    "react": "18.2.0",
-    "react-native": "0.71.3"
+    "react": "*",
+    "react-native": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-vector-icons": "*",
+    "@react-navigation/bottom-tabs": "*",
+    "@react-navigation/native": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
