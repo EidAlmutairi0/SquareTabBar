@@ -21,14 +21,9 @@ const SingleTab = (props) => {
           height: "100%",
         }}
       >
-        <View
-          style={[
-            props.currentTab === props.index && styles.selectedView,
-            styles.icon,
-          ]}
-        >
+        <Text style={[styles.icon, props.iconsStyle]}>
           {props.currentTab !== props.index && props.icon}
-        </View>
+        </Text>
         <Text
           style={[
             styles.text,
